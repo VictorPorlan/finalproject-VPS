@@ -1,0 +1,202 @@
+# TradeBinder Frontend - Cursor Rules
+
+## Contexto del Proyecto
+Este es el frontend de TradeBinder, una plataforma web para compra/venta de cartas de Magic: The Gathering.
+Tecnologías: React, MaterialUI, Tailwind CSS, Context API/Redux, Axios/Fetch.
+
+## Arquitectura y Patrones
+- **Arquitectura**: SPA (Single Page Application) con React
+- **Patrón**: Component-based architecture con hooks
+- **Estado**: Context API o Redux para estado global
+- **Routing**: React Router para navegación
+- **UI**: MaterialUI + Tailwind CSS para diseño
+- **HTTP**: Axios o Fetch para comunicación con API
+
+## Estructura de Archivos
+```
+/frontend
+├── /public
+│   ├── index.html
+│   └── favicon.ico
+├── /src
+│   ├── /components      # Componentes reutilizables
+│   │   ├── /common     # Componentes comunes (Button, Input, Modal)
+│   │   ├── /layout     # Componentes de layout (Header, Footer, Sidebar)
+│   │   └── /features   # Componentes específicos de funcionalidad
+│   ├── /pages          # Páginas principales
+│   │   ├── Home.tsx
+│   │   ├── Login.tsx
+│   │   ├── Register.tsx
+│   │   ├── Announcements.tsx
+│   │   └── Profile.tsx
+│   ├── /services       # Servicios para API calls
+│   ├── /context        # Context providers
+│   ├── /hooks          # Custom hooks
+│   ├── /utils          # Utilidades y helpers
+│   ├── /types          # TypeScript type definitions
+│   ├── /assets         # Imágenes, iconos, etc.
+│   ├── App.tsx
+│   └── index.tsx
+└── package.json
+```
+
+## Buenas Prácticas Frontend
+
+### Componentes React
+- Usar functional components con hooks
+- Implementar TypeScript para type safety
+- Crear componentes reutilizables y modulares
+- Usar props drilling mínimo, preferir Context API
+- Implementar error boundaries para manejo de errores
+- Usar React.memo para optimización cuando sea necesario
+
+### Estado y Datos
+- Context API para estado global (autenticación, usuario)
+- useState para estado local de componentes
+- useEffect para side effects y llamadas a API
+- Custom hooks para lógica reutilizable
+- Manejar estados de carga y error apropiadamente
+
+### UI/UX
+- MaterialUI para componentes base y sistema de diseño
+- Tailwind CSS para estilos personalizados y responsive design
+- Diseño mobile-first
+- Implementar loading states y skeletons
+- Mensajes de error claros y user-friendly
+- Navegación intuitiva y accesible
+
+### Comunicación con API
+- Servicios centralizados para llamadas a API
+- Interceptors para manejo de tokens JWT
+- Manejo de errores HTTP consistente
+- Implementar retry logic para requests fallidos
+- Loading states durante llamadas asíncronas
+
+### Routing y Navegación
+- React Router para navegación SPA
+- Rutas protegidas para usuarios autenticados
+- Redirects apropiados después de login/logout
+- Breadcrumbs para navegación compleja
+- Manejo de rutas 404
+
+### Performance
+- Lazy loading de componentes pesados
+- Code splitting por rutas
+- Optimización de imágenes
+- Memoización de componentes costosos
+- Bundle analysis para identificar optimizaciones
+
+## Documentación y Logging
+
+### Logging de Conversaciones IA
+**IMPORTANTE**: Mantener un registro completo de todas las conversaciones con IA en `/ia-doc/prompts.md`
+
+Para cada interacción con IA, documentar:
+1. **Fecha y hora** de la conversación
+2. **Prompt del usuario** (texto completo)
+3. **Respuesta de la IA** (resumen de la solución propuesta)
+4. **Componentes creados/modificados**
+5. **Decisiones de UI/UX** tomadas
+6. **Próximos pasos** identificados
+
+Formato sugerido:
+```markdown
+## [YYYY-MM-DD HH:MM] - [Título de la tarea]
+
+**Prompt del usuario:**
+[Texto completo del prompt]
+
+**Respuesta de la IA:**
+[Resumen de la solución implementada]
+
+**Componentes modificados:**
+- ComponentName.tsx
+- PageName.tsx
+
+**Decisiones de UI/UX:**
+- [Decisión 1]
+- [Decisión 2]
+
+**Próximos pasos:**
+- [Tarea 1]
+- [Tarea 2]
+```
+
+### Documentación Técnica
+- Documentar props de componentes complejos
+- Comentar lógica de negocio compleja
+- Mantener README actualizado
+- Documentar decisiones de diseño
+- Crear storybook para componentes (opcional)
+
+## Convenciones de Código
+
+### Naming
+- Componentes: PascalCase (UserProfile.tsx)
+- Archivos: PascalCase para componentes, camelCase para utilities
+- Variables y funciones: camelCase
+- Constantes: UPPER_SNAKE_CASE
+- Props interfaces: ComponentNameProps
+
+### Imports
+- Imports de React primero
+- Imports de librerías externas (MaterialUI, etc.)
+- Imports relativos después
+- Agrupar por tipo (components, services, types)
+
+### JSX
+- Usar fragmentos (<>) cuando sea necesario
+- Props en líneas separadas para componentes complejos
+- Usar destructuring para props
+- Conditional rendering con operadores ternarios o &&
+
+### Styling
+- MaterialUI para componentes base
+- Tailwind CSS para estilos personalizados
+- CSS modules solo cuando sea necesario
+- Responsive design con breakpoints de Tailwind
+- Consistencia en spacing y colors
+
+## Testing
+
+### Estrategia de Testing
+- Unit tests para componentes con React Testing Library
+- Integration tests para flujos de usuario
+- Snapshot tests para componentes estables
+- Mock de servicios externos
+- Testing de hooks personalizados
+
+### Herramientas
+- Jest para test runner
+- React Testing Library para testing de componentes
+- MSW para mock de API calls
+- Coverage mínimo del 80%
+
+## Comandos Útiles
+```bash
+# Desarrollo
+npm start
+
+# Testing
+npm test
+npm run test:coverage
+
+# Build
+npm run build
+
+# Linting
+npm run lint
+npm run lint:fix
+
+# Type checking
+npm run type-check
+```
+
+## Consideraciones Especiales
+- El proyecto será evaluado por habilidades con IA
+- Mantener documentación completa de decisiones técnicas
+- Priorizar experiencia de usuario fluida
+- Implementar funcionalidades siguiendo las historias de usuario
+- Diseño responsive y accesible
+- Performance optimizada para móviles
+- Integración fluida con backend NestJS
