@@ -56,3 +56,83 @@ Se han creado los archivos .cursorrules para ambos proyectos:
 - Implementar módulo de autenticación
 - Crear estructura inicial del frontend React
 - Configurar Docker para desarrollo
+
+---
+
+## [2025-01-27 15:25] - Configuración inicial del proyecto backend
+
+**Prompt del usuario:**
+Crea un proyecto inicial para el backend, usando las tecnologias mencionadas en la documentación. Centrate solo en instalar las tecnologias y en generar lo necesario para tener la estructura minima.
+
+**Respuesta de la IA:**
+Se ha configurado completamente el proyecto backend de TradeBinder con NestJS:
+
+**Configuración del proyecto NestJS:**
+- Inicializado proyecto NestJS con TypeScript usando @nestjs/cli
+- Instaladas dependencias principales: TypeORM, PostgreSQL, JWT, Passport, bcryptjs
+- Instaladas dependencias de desarrollo: @types/pg, @types/bcryptjs, @types/passport-jwt
+- Configurado main.ts con ValidationPipe, CORS y prefijo de API
+
+**Estructura de carpetas creada:**
+- `/src/modules` - Módulos de funcionalidad (auth, announcements, messages)
+- `/src/controllers` - Controladores REST
+- `/src/services` - Lógica de negocio
+- `/src/entities` - Entidades de base de datos
+- `/src/dto` - Data Transfer Objects
+- `/src/guards` - Guards de autenticación/autorización
+- `/src/middlewares` - Middlewares personalizados
+- `/src/interceptors` - Interceptors para transformación
+- `/src/pipes` - Pipes de validación
+- `/src/config` - Archivos de configuración
+- `/db/migrations` - Migraciones de base de datos
+- `/db/seeds` - Seeds para datos de prueba
+
+**Archivos de configuración creados:**
+
+**Configuración de Base de Datos (`/src/config/database.config.ts`):**
+- Configuración TypeORM para PostgreSQL
+- Variables de entorno para conexión
+- Configuración de entidades y migraciones
+- SSL configurado para producción
+
+**Configuración JWT (`/src/config/jwt.config.ts`):**
+- Secretos para JWT y refresh tokens
+- Tiempos de expiración configurables
+- Variables de entorno para seguridad
+
+**Variables de Entorno (`env.example`):**
+- Configuración de base de datos
+- Configuración JWT
+- Configuración de aplicación
+- Configuración CORS
+
+**Docker Compose (`docker-compose.yml`):**
+- Servicio PostgreSQL con volúmenes persistentes
+- Servicio Redis para caché
+- Red personalizada para servicios
+- Configuración de puertos y variables
+
+**Archivos modificados:**
+- backend/src/main.ts (configuración global de la app)
+- backend/package.json (scripts y metadatos actualizados)
+
+**Scripts agregados al package.json:**
+- Scripts de migración (generate, run, revert)
+- Scripts de seeds
+- Scripts de Docker (up, down, logs)
+
+**Decisiones técnicas:**
+- Arquitectura modular con NestJS siguiendo .cursorrules
+- TypeORM para ORM con PostgreSQL
+- JWT para autenticación con Passport
+- Validación global con class-validator
+- CORS configurado para desarrollo
+- Docker para consistencia de entorno
+
+**Próximos pasos:**
+- Crear entidades de base de datos (User, Card, Announcement, Message)
+- Implementar módulo de autenticación con JWT
+- Crear DTOs para validación
+- Implementar guards y middleware de seguridad
+- Configurar migraciones iniciales
+- Crear seeds de datos de prueba

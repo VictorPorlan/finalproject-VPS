@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: tradebinder-postgres
+    environment:
+      POSTGRES_DB: tradebinder
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./db/init:/docker-entrypoint-initdb.d
+    networks:
+      - tradebinder-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: tradebinder-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - tradebinder-network
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  tradebinder-network:
+    driver: bridge
