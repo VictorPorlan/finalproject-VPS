@@ -1,6 +1,13 @@
-export const jwtConfig = {
-  secret: process.env.JWT_SECRET || 'your-secret-key',
-  expiresIn: process.env.JWT_EXPIRES_IN || '1h',
-  refreshSecret: process.env.JWT_REFRESH_SECRET || 'your-refresh-secret-key',
-  refreshExpiresIn: process.env.JWT_REFRESH_EXPIRES_IN || '7d',
+import { JwtModuleOptions } from '@nestjs/jwt';
+
+export const jwtConfig: JwtModuleOptions = {
+  secret: process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-in-production',
+  signOptions: {
+    expiresIn: process.env.JWT_EXPIRES_IN || '1h',
+  },
+};
+
+export const jwtRefreshConfig = {
+  secret: process.env.JWT_REFRESH_SECRET || 'your-super-secret-refresh-key-change-in-production',
+  expiresIn: process.env.JWT_REFRESH_EXPIRES_IN || '7d',
 };

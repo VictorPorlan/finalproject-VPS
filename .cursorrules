@@ -1,0 +1,222 @@
+# TradeBinder - Cursor Rules Root
+
+## Contexto del Proyecto
+TradeBinder es una plataforma web especializada en la compra, venta e intercambio de cartas de Magic: The Gathering, diseñada para fomentar el comercio local entre jugadores.
+
+## Estructura del Proyecto
+```
+/proyecto-mtg-market
+├── /backend          # API NestJS + PostgreSQL
+├── /frontend         # SPA React + MaterialUI
+├── /ia-doc          # Documentación generada por IA
+└── docker-compose.yml
+```
+
+## Reglas Generales
+
+### 🎯 Principio Fundamental
+**Cada proyecto (backend/frontend) debe respetar sus propias reglas específicas definidas en sus respectivos archivos `.cursorrules`:**
+
+- **Backend**: Consultar `/backend/.cursorrules` para reglas específicas de NestJS, TypeORM, PostgreSQL, JWT, etc.
+- **Frontend**: Consultar `/frontend/.cursorrules` para reglas específicas de React, MaterialUI, Tailwind CSS, Context API, etc.
+
+### 📁 Organización por Proyecto
+Cuando trabajes en el proyecto, identifica primero en qué directorio estás:
+
+1. **Si estás en `/backend/`** → Sigue las reglas de `/backend/.cursorrules`
+2. **Si estás en `/frontend/`** → Sigue las reglas de `/frontend/.cursorrules`
+3. **Si estás en el root** → Aplica estas reglas generales
+
+### 🔄 Flujo de Trabajo
+1. **Identificar el contexto**: ¿Backend o Frontend?
+2. **Consultar reglas específicas**: Leer el `.cursorrules` correspondiente
+3. **Consultar tickets disponibles**: Revisar `/ia-doc/tickets-[proyecto].md`
+4. **Seleccionar ticket**: Según prioridad y dependencias
+5. **Aplicar buenas prácticas**: Seguir las convenciones del proyecto específico
+6. **Marcar progreso**: Actualizar checkboxes de tareas y criterios
+7. **Documentar decisiones**: Mantener logs en `/ia-doc/prompts.md`
+
+## Gestión de Tickets y Progreso
+
+### 🎫 Sistema de Tickets Global
+**IMPORTANTE**: Cada proyecto debe trabajar basándose en sus tickets específicos
+
+**Tickets por Proyecto:**
+- **Backend**: `/backend/ia-doc/tickets-backend.md`
+- **Frontend**: `/frontend/ia-doc/tickets-frontend.md`
+
+**Flujo de Trabajo con Tickets:**
+1. **Consultar tickets disponibles** en el proyecto correspondiente
+2. **Seleccionar ticket** según prioridad y dependencias
+3. **Marcar tareas como completadas** usando checkboxes `- [x]`
+4. **Actualizar progreso** en tiempo real
+5. **Marcar ticket como finalizado** cuando todos los criterios se cumplan
+
+**Formato de Seguimiento Estándar:**
+```markdown
+### Tareas
+- [x] Tarea completada
+- [ ] Tarea pendiente
+- [🔄] Tarea en progreso
+- [❌] Tarea bloqueada
+
+### Criterios de Aceptación
+- [x] Criterio cumplido
+- [ ] Criterio pendiente
+```
+
+**Marcado de Progreso:**
+- `- [x]` - Tarea completada
+- `- [ ]` - Tarea pendiente  
+- `- [🔄]` - Tarea en progreso
+- `- [❌]` - Tarea bloqueada o con problemas
+
+### 📊 Seguimiento de Progreso
+- **Actualizar tickets** después de cada sesión de trabajo
+- **Marcar criterios de aceptación** cuando se cumplan
+- **Documentar decisiones técnicas** en cada ticket
+- **Mantener historial** de cambios en tickets
+- **Seguir orden de prioridad** definido en los tickets
+
+## Documentación y Logging IA
+
+### 📝 Logging Obligatorio
+**IMPORTANTE**: Mantener un registro completo de todas las conversaciones con IA en `/ia-doc/prompts.md`
+
+Para cada interacción con IA, documentar:
+1. **Fecha y hora** de la conversación
+2. **Prompt del usuario** (texto completo)
+3. **Respuesta de la IA** (resumen de la solución propuesta)
+4. **Archivos modificados** o creados
+5. **Decisiones técnicas** tomadas
+6. **Próximos pasos** identificados
+
+### 📋 Formato de Documentación
+```markdown
+## [YYYY-MM-DD HH:MM] - [Título de la tarea]
+
+**Contexto:** [Backend/Frontend/Root]
+**Prompt del usuario:**
+[Texto completo del prompt]
+
+**Respuesta de la IA:**
+[Resumen de la solución implementada]
+
+**Archivos modificados:**
+- archivo1.ts
+- archivo2.tsx
+
+**Decisiones técnicas:**
+- [Decisión 1]
+- [Decisión 2]
+
+**Próximos pasos:**
+- [Tarea 1]
+- [Tarea 2]
+```
+
+## Tecnologías del Proyecto
+
+### Backend
+- **Framework**: NestJS
+- **Base de Datos**: PostgreSQL
+- **ORM**: TypeORM
+- **Autenticación**: JWT + Passport
+- **Validación**: class-validator
+- **Testing**: Jest + Supertest
+
+### Frontend
+- **Framework**: React
+- **UI Library**: MaterialUI
+- **Styling**: Tailwind CSS
+- **Estado**: Context API
+- **Routing**: React Router
+- **HTTP**: Axios/Fetch
+
+### Infraestructura
+- **Contenedores**: Docker
+- **Base de Datos**: PostgreSQL
+- **Cache**: Redis (futuro)
+- **CI/CD**: GitHub Actions (futuro)
+
+## Convenciones Generales
+
+### 📁 Estructura de Archivos
+- Usar kebab-case para nombres de archivos
+- Organizar por funcionalidad, no por tipo
+- Mantener estructura modular y escalable
+
+### 🔧 Desarrollo
+- Usar TypeScript en ambos proyectos
+- Implementar testing desde el inicio
+- Seguir principios SOLID
+- Mantener código limpio y documentado
+
+### 🚀 Despliegue
+- Usar Docker para consistencia
+- Implementar variables de entorno
+- Configurar logging apropiado
+- Mantener documentación actualizada
+
+## Comandos Útiles
+
+### Root del Proyecto
+```bash
+# Levantar base de datos
+docker-compose up -d
+
+# Ver logs de servicios
+docker-compose logs -f
+
+# Parar servicios
+docker-compose down
+```
+
+### Backend
+```bash
+cd backend
+npm run start:dev
+npm run test
+npm run migration:run
+```
+
+### Frontend
+```bash
+cd frontend
+npm start
+npm test
+npm run build
+```
+
+## Consideraciones Especiales
+
+### 🎓 Evaluación del Proyecto
+- Este proyecto será evaluado por habilidades con IA
+- Mantener documentación completa de todas las decisiones técnicas
+- Priorizar código limpio, mantenible y bien documentado
+- Implementar funcionalidades siguiendo las historias de usuario definidas
+
+### 🔒 Seguridad
+- Implementar autenticación robusta
+- Validar todas las entradas
+- Usar HTTPS en producción
+- Mantener dependencias actualizadas
+
+### 📱 Experiencia de Usuario
+- Diseño responsive y mobile-first
+- Navegación intuitiva
+- Feedback claro al usuario
+- Performance optimizada
+
+## Enlaces Rápidos
+
+- **Backend Rules**: `/backend/.cursorrules`
+- **Frontend Rules**: `/frontend/.cursorrules`
+- **Tickets Backend**: `/backend/ia-doc/tickets-backend.md`
+- **Tickets Frontend**: `/frontend/ia-doc/tickets-frontend.md`
+- **Documentación IA**: `/ia-doc/prompts.md`
+- **README Principal**: `/README.md`
+
+---
+
+**Recuerda**: Siempre consultar las reglas específicas del proyecto en el que estés trabajando. Este archivo root es solo una guía general.

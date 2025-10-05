@@ -86,6 +86,42 @@ Tecnologías: React, MaterialUI, Tailwind CSS, Context API/Redux, Axios/Fetch.
 - Memoización de componentes costosos
 - Bundle analysis para identificar optimizaciones
 
+## Gestión de Tickets y Progreso
+
+### 🎫 Sistema de Tickets
+**IMPORTANTE**: El desarrollo debe basarse en los tickets definidos en `/ia-doc/tickets-frontend.md`
+
+**Flujo de Trabajo con Tickets:**
+1. **Consultar tickets disponibles** en `/ia-doc/tickets-frontend.md`
+2. **Seleccionar ticket** según prioridad y dependencias
+3. **Marcar tareas como completadas** usando checkboxes `- [x]`
+4. **Actualizar progreso** en tiempo real
+5. **Marcar ticket como finalizado** cuando todos los criterios de aceptación se cumplan
+
+**Formato de Seguimiento:**
+```markdown
+### Tareas
+- [x] Tarea completada
+- [ ] Tarea pendiente
+- [🔄] Tarea en progreso
+
+### Criterios de Aceptación
+- [x] Criterio cumplido
+- [ ] Criterio pendiente
+```
+
+**Marcado de Progreso:**
+- `- [x]` - Tarea completada
+- `- [ ]` - Tarea pendiente  
+- `- [🔄]` - Tarea en progreso
+- `- [❌]` - Tarea bloqueada o con problemas
+
+### 📊 Seguimiento de Progreso
+- **Actualizar tickets** después de cada sesión de trabajo
+- **Marcar criterios de aceptación** cuando se cumplan
+- **Documentar decisiones técnicas** en cada ticket
+- **Mantener historial** de cambios en tickets
+
 ## Documentación y Logging
 
 ### Logging de Conversaciones IA
