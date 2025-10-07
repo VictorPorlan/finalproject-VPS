@@ -5,6 +5,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { databaseConfig } from './config/database.config';
 import { User, Card, Edition, Listing, Transaction, Message, Review, Favorite } from './entities';
+import { AuthModule } from './modules/auth.module';
 
 @Module({
   imports: [
@@ -18,6 +19,8 @@ import { User, Card, Edition, Listing, Transaction, Message, Review, Favorite } 
       ...databaseConfig,
       entities: [User, Card, Edition, Listing, Transaction, Message, Review, Favorite],
     }),
+    // Auth module
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

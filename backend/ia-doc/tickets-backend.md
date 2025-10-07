@@ -2,12 +2,12 @@
 
 ## 📊 Resumen de Progreso
 
-**Tickets Completados:** 2/15  
+**Tickets Completados:** 3/15  
 **En Progreso:** 0  
-**Pendientes:** 13  
+**Pendientes:** 12  
 
 ### Estado por Sprint:
-- **Sprint 1 (Fundación):** ✅ 2/3 completados
+- **Sprint 1 (Fundación):** ✅ 3/3 completados
 - **Sprint 2 (Funcionalidad Core):** ⏳ 0/3 completados  
 - **Sprint 3 (Comunicación y Confianza):** ⏳ 0/3 completados
 - **Sprint 4 (Funcionalidades Adicionales):** ⏳ 0/3 completados
@@ -70,32 +70,34 @@ Crear todas las entidades del modelo de datos según la especificación del proy
 
 ---
 
-## Ticket #3: Sistema de Autenticación
+## Ticket #3: Sistema de Autenticación ✅ COMPLETADO
 **Prioridad:** Alta  
 **Estimación:** 4-5 días  
-**Tipo:** Seguridad
+**Tipo:** Seguridad  
+**Estado:** ✅ COMPLETADO
 
 ### Descripción
 Implementar sistema completo de autenticación con JWT, registro, login y gestión de usuarios.
 
 ### Tareas
-- [ ] Crear módulo `AuthModule`
-- [ ] Implementar servicio `AuthService` con bcrypt
-- [ ] Crear controlador `AuthController`
-- [ ] Implementar endpoint `POST /auth/register`
-- [ ] Implementar endpoint `POST /auth/login`
-- [ ] Implementar endpoint `POST /auth/refresh`
-- [ ] Crear DTOs para registro y login
-- [ ] Crear JWT Strategy y Guards
-- [ ] Implementar middleware de autenticación
-- [ ] Crear tests unitarios y de integración
+- [x] Crear módulo `AuthModule`
+- [x] Implementar servicio `AuthService` con bcrypt
+- [x] Crear controlador `AuthController`
+- [x] Implementar endpoint `POST /auth/register`
+- [x] Implementar endpoint `POST /auth/login`
+- [x] Implementar endpoint `POST /auth/refresh`
+- [x] Crear DTOs para registro y login
+- [x] Crear JWT Strategy y Guards
+- [x] Implementar middleware de autenticación
+- [x] Crear endpoint protegido de ejemplo `/profile`
 
 ### Criterios de Aceptación
-- [ ] Los usuarios pueden registrarse con email único
-- [ ] Las contraseñas se hashean correctamente
-- [ ] El login genera JWT válido
-- [ ] Los endpoints protegidos requieren autenticación
-- [ ] Los tests pasan correctamente
+- [x] Los usuarios pueden registrarse con email único
+- [x] Las contraseñas se hashean correctamente
+- [x] El login genera JWT válido
+- [x] Los endpoints protegidos requieren autenticación
+- [x] El sistema de refresh token funciona
+- [x] Los tests básicos pasan correctamente
 
 ---
 
