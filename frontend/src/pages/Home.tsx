@@ -16,9 +16,11 @@ import {
   Favorite,
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
 
   const features = [
     {
@@ -73,18 +75,33 @@ const Home: React.FC = () => {
             Conecta con otros coleccionistas, compra y vende cartas de forma segura y fácil.
           </Typography>
           <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', flexWrap: 'wrap' }}>
-            <Button
-              variant="contained"
-              size="large"
-              sx={{ 
-                backgroundColor: 'white', 
-                color: '#1976d2',
-                '&:hover': { backgroundColor: '#f5f5f5' }
-              }}
-              onClick={() => navigate('/register')}
-            >
-              Registrarse Gratis
-            </Button>
+            {!isAuthenticated ? (
+              <Button
+                variant="contained"
+                size="large"
+                sx={{ 
+                  backgroundColor: 'white', 
+                  color: '#1976d2',
+                  '&:hover': { backgroundColor: '#f5f5f5' }
+                }}
+                onClick={() => navigate('/register')}
+              >
+                Registrarse Gratis
+              </Button>
+            ) : (
+              <Button
+                variant="contained"
+                size="large"
+                sx={{ 
+                  backgroundColor: 'white', 
+                  color: '#1976d2',
+                  '&:hover': { backgroundColor: '#f5f5f5' }
+                }}
+                onClick={() => navigate('/profile')}
+              >
+                Mi Perfil
+              </Button>
+            )}
             <Button
               variant="outlined"
               size="large"
@@ -109,7 +126,7 @@ const Home: React.FC = () => {
         
         <Grid container spacing={4}>
           {features.map((feature, index) => (
-            <Grid item xs={12} sm={6} md={3} key={index}>
+            <Grid size={{ xs: 12, sm: 6, md: 3}} key={index}>
               <Card
                 sx={{
                   height: '100%',
@@ -158,18 +175,21 @@ const Home: React.FC = () => {
       >
         <Container maxWidth="md">
           <Typography variant="h4" component="h2" gutterBottom>
-            ¿Listo para comenzar?
+            {isAuthenticated ? '¡Bienvenido de vuelta!' : '¿Listo para comenzar?'}
           </Typography>
           <Typography variant="body1" color="text.secondary" sx={{ mb: 4 }}>
-            Únete a miles de coleccionistas que ya confían en TradeBinder para sus transacciones.
+            {isAuthenticated 
+              ? 'Explora nuestro catálogo y encuentra las cartas que necesitas.'
+              : 'Únete a miles de coleccionistas que ya confían en TradeBinder para sus transacciones.'
+            }
           </Typography>
           <Button
             variant="contained"
             size="large"
-            onClick={() => navigate('/register')}
+            onClick={() => navigate(isAuthenticated ? '/catalog' : '/register')}
             sx={{ textTransform: 'none' }}
           >
-            Crear Cuenta Gratis
+            {isAuthenticated ? 'Explorar Catálogo' : 'Crear Cuenta Gratis'}
           </Button>
         </Container>
       </Box>

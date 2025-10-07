@@ -1,21 +1,67 @@
 import React from 'react';
-import { Container, Typography, Box } from '@mui/material';
+import { Container } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import { useNotification } from '../context/NotificationContext';
+import AuthForm from '../components/common/AuthForm';
 
 const Login: React.FC = () => {
+  const navigate = useNavigate();
+  const { login, isLoading, error, clearError, isAuthenticated } = useAuth();
+  const { showSuccess, showError } = useNotification();
+
+  // Redirigir automáticamente cuando el usuario se autentica
+  React.useEffect(() => {
+    if (isAuthenticated) {
+      showSuccess('¡Bienvenido! Has iniciado sesión correctamente.');
+      navigate('/');
+    }
+  }, [isAuthenticated, navigate, showSuccess]);
+
+  const handleLogin = async (data: Record<string, string>) => {
+    try {
+      await login(data.email, data.password);
+      // La redirección se maneja en el useEffect
+    } catch (error: any) {
+      const errorMessage = error.response?.data?.message || 'Error al iniciar sesión';
+      showError(errorMessage);
+    }
+  };
+
+  React.useEffect(() => {
+    clearError();
+  }, [clearError]);
+
+  const fields = [
+    {
+      name: 'email',
+      label: 'Email',
+      type: 'email' as const,
+      required: true,
+      placeholder: 'tu@email.com',
+    },
+    {
+      name: 'password',
+      label: 'Contraseña',
+      type: 'password' as const,
+      required: true,
+      placeholder: '••••••••',
+    },
+  ];
+
   return (
     <Container maxWidth="sm" sx={{ py: 8 }}>
-      <Box sx={{ textAlign: 'center', mb: 4 }}>
-        <Typography variant="h4" component="h1" gutterBottom>
-          Iniciar Sesión
-        </Typography>
-        <Typography variant="body1" color="text.secondary">
-          Accede a tu cuenta de TradeBinder
-        </Typography>
-      </Box>
-      {/* TODO: Implementar formulario de login */}
-      <Typography variant="body2" color="text.secondary" textAlign="center">
-        Formulario de login en desarrollo...
-      </Typography>
+      <AuthForm
+        title="Iniciar Sesión"
+        fields={fields}
+        submitText="Iniciar Sesión"
+        onSubmit={handleLogin}
+        isLoading={isLoading}
+        error={error || undefined}
+        linkText="¿No tienes cuenta?"
+        linkHref="/register"
+        linkLabel="Regístrate aquí"
+      />
     </Container>
   );
 };

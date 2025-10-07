@@ -138,8 +138,15 @@ export class AuthService {
   private async generateTokens(user: User) {
     const payload = { sub: user.id, email: user.email };
 
-    const accessToken = this.jwtService.sign(payload, jwtConfig);
-    const refreshToken = this.jwtService.sign(payload, jwtRefreshConfig);
+    const accessToken = this.jwtService.sign(payload, {
+      secret: jwtConfig.secret,
+      expiresIn: jwtConfig.signOptions?.expiresIn,
+    });
+    
+    const refreshToken = this.jwtService.sign(payload, {
+      secret: jwtRefreshConfig.secret,
+      expiresIn: jwtRefreshConfig.expiresIn,
+    });
 
     return {
       access_token: accessToken,

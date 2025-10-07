@@ -1,9 +1,9 @@
 import React, { createContext, useContext, useReducer, useEffect, ReactNode } from 'react';
-import { User, AuthResponse } from '../types';
+import { AuthUser, AuthResponse } from '../types';
 import apiService from '../services/api';
 
 interface AuthState {
-  user: User | null;
+  user: AuthUser | null;
   token: string | null;
   isAuthenticated: boolean;
   isLoading: boolean;
@@ -12,7 +12,7 @@ interface AuthState {
 
 interface AuthContextType extends AuthState {
   login: (email: string, password: string) => Promise<void>;
-  register: (email: string, username: string, password: string, location?: string) => Promise<void>;
+  register: (email: string, username: string, password: string, location?: string) => Promise<AuthResponse>;
   logout: () => void;
   clearError: () => void;
 }
@@ -23,13 +23,13 @@ type AuthAction =
   | { type: 'AUTH_FAILURE'; payload: string }
   | { type: 'LOGOUT' }
   | { type: 'CLEAR_ERROR' }
-  | { type: 'SET_USER'; payload: User };
+  | { type: 'SET_USER'; payload: AuthUser };
 
 const initialState: AuthState = {
   user: null,
   token: null,
   isAuthenticated: false,
-  isLoading: false,
+  isLoading: true, // Start with loading true to check for existing token
   error: null,
 };
 
@@ -103,6 +103,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           localStorage.removeItem('authToken');
           dispatch({ type: 'AUTH_FAILURE', payload: 'Session expired' });
         });
+    } else {
+      // Si no hay token, establecer loading como false
+      dispatch({ type: 'AUTH_FAILURE', payload: '' });
     }
   }, []);
 
@@ -123,8 +126,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       dispatch({ type: 'AUTH_START' });
       const response = await apiService.register({ email, username, password, location });
-      localStorage.setItem('authToken', response.token);
-      dispatch({ type: 'AUTH_SUCCESS', payload: response });
+      // No hacer login automático después del registro
+      dispatch({ type: 'AUTH_FAILURE', payload: '' }); // Resetear estado sin error
+      return response; // Devolver la respuesta para mostrar éxito
     } catch (error: any) {
       const errorMessage = error.response?.data?.message || 'Registration failed';
       dispatch({ type: 'AUTH_FAILURE', payload: errorMessage });

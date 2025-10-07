@@ -2,13 +2,13 @@
 
 ## 📊 Resumen de Progreso
 
-**Tickets Completados:** 1/8  
+**Tickets Completados:** 2/8  
 **En Progreso:** 0  
-**Pendientes:** 7  
+**Pendientes:** 6  
 
 ### Estado por Sprint:
-- **Sprint 1 (Fundación):** ✅ 1/2 completados
-- **Sprint 2 (Autenticación):** ⏳ 0/2 completados  
+- **Sprint 1 (Fundación):** ✅ 2/2 completados
+- **Sprint 2 (Autenticación):** ✅ 1/2 completados  
 - **Sprint 3 (Funcionalidad Core):** ⏳ 0/2 completados
 - **Sprint 4 (Comercio):** ⏳ 0/2 completados
 
@@ -40,30 +40,31 @@ Configurar la estructura base del proyecto React con todas las dependencias nece
 
 ---
 
-## Ticket #2: Sistema de Autenticación Frontend
+## Ticket #2: Sistema de Autenticación Frontend ✅ COMPLETADO
 **Prioridad:** Alta  
 **Estimación:** 2-3 días  
-**Tipo:** Autenticación
+**Tipo:** Autenticación  
+**Estado:** ✅ COMPLETADO
 
 ### Descripción
 Implementar sistema completo de autenticación en el frontend con login, registro y gestión de sesión.
 
 ### Tareas
-- [ ] Crear AuthContext para gestión de estado
-- [ ] Implementar página de Login
-- [ ] Implementar página de Registro
-- [ ] Crear componentes de formulario (LoginForm, RegisterForm)
-- [ ] Implementar manejo de tokens JWT
-- [ ] Crear rutas protegidas
-- [ ] Implementar logout y redirección
-- [ ] Manejar estados de carga y error
+- [x] Crear AuthContext para gestión de estado
+- [x] Implementar página de Login
+- [x] Implementar página de Registro
+- [x] Crear componentes de formulario (AuthForm reutilizable)
+- [x] Implementar manejo de tokens JWT
+- [x] Crear rutas protegidas
+- [x] Implementar logout y redirección
+- [x] Manejar estados de carga y error
 
 ### Criterios de Aceptación
-- [ ] Los usuarios pueden registrarse correctamente
-- [ ] Los usuarios pueden hacer login
-- [ ] Las rutas protegidas funcionan
-- [ ] El logout funciona correctamente
-- [ ] Los tokens se manejan correctamente
+- [x] Los usuarios pueden registrarse correctamente
+- [x] Los usuarios pueden hacer login
+- [x] Las rutas protegidas funcionan
+- [x] El logout funciona correctamente
+- [x] Los tokens se manejan correctamente
 
 ---
 

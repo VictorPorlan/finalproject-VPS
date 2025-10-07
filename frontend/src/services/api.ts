@@ -7,7 +7,7 @@ import {
   SendMessageRequest,
   Announcement,
   Message,
-  User,
+  AuthUser,
   PaginatedResponse
 } from '../types';
 
@@ -61,8 +61,8 @@ class ApiService {
     return response.data;
   }
 
-  async getCurrentUser(): Promise<User> {
-    const response: AxiosResponse<User> = await this.api.get('/auth/me');
+  async getCurrentUser(): Promise<AuthUser> {
+    const response: AxiosResponse<AuthUser> = await this.api.get('/auth/me');
     return response.data;
   }
 
@@ -106,13 +106,13 @@ class ApiService {
   }
 
   // Users endpoints
-  async getUserById(id: number): Promise<User> {
-    const response: AxiosResponse<User> = await this.api.get(`/users/${id}`);
+  async getUserById(id: number): Promise<AuthUser> {
+    const response: AxiosResponse<AuthUser> = await this.api.get(`/users/${id}`);
     return response.data;
   }
 
-  async updateUser(id: number, userData: Partial<User>): Promise<User> {
-    const response: AxiosResponse<User> = await this.api.put(`/users/${id}`, userData);
+  async updateUser(id: number, userData: Partial<AuthUser>): Promise<AuthUser> {
+    const response: AxiosResponse<AuthUser> = await this.api.put(`/users/${id}`, userData);
     return response.data;
   }
 }

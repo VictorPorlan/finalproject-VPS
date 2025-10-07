@@ -2,8 +2,10 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import { AuthProvider } from './context/AuthContext';
+import { AuthProvider, useAuth } from './context/AuthContext';
+import { NotificationProvider } from './context/NotificationContext';
 import Layout from './components/layout/Layout';
+import LoadingSpinner from './components/common/LoadingSpinner';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -24,37 +26,52 @@ const theme = createTheme({
   },
 });
 
+// App Routes Component
+const AppRoutes: React.FC = () => {
+  const { isLoading } = useAuth();
+
+  if (isLoading) {
+    return <LoadingSpinner message="Cargando aplicación..." />;
+  }
+
+  return (
+    <Routes>
+      {/* Rutas públicas */}
+      <Route path="/" element={<Home />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      <Route path="/catalog" element={<Catalog />} />
+      <Route path="/announcements" element={<Announcements />} />
+      
+      {/* Rutas protegidas */}
+      <Route 
+        path="/profile" 
+        element={
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        } 
+      />
+      
+      {/* Redirección por defecto */}
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
+  );
+};
+
 function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <AuthProvider>
-        <Router>
-          <Layout>
-            <Routes>
-              {/* Rutas públicas */}
-              <Route path="/" element={<Home />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/catalog" element={<Catalog />} />
-              <Route path="/announcements" element={<Announcements />} />
-              
-              {/* Rutas protegidas */}
-              <Route 
-                path="/profile" 
-                element={
-                  <ProtectedRoute>
-                    <Profile />
-                  </ProtectedRoute>
-                } 
-              />
-              
-              {/* Redirección por defecto */}
-              <Route path="*" element={<Navigate to="/" replace />} />
-            </Routes>
-          </Layout>
-        </Router>
-      </AuthProvider>
+      <NotificationProvider>
+        <AuthProvider>
+          <Router>
+            <Layout>
+              <AppRoutes />
+            </Layout>
+          </Router>
+        </AuthProvider>
+      </NotificationProvider>
     </ThemeProvider>
   );
 }

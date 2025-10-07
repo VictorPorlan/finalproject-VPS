@@ -17,10 +17,12 @@ import {
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { useNotification } from '../../context/NotificationContext';
 
 const Header: React.FC = () => {
   const navigate = useNavigate();
   const { user, isAuthenticated, logout } = useAuth();
+  const { showSuccess } = useNotification();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -33,6 +35,7 @@ const Header: React.FC = () => {
 
   const handleLogout = () => {
     logout();
+    showSuccess('Has cerrado sesión correctamente.');
     handleClose();
     navigate('/');
   };

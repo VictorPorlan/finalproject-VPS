@@ -20,7 +20,7 @@ const Footer: React.FC = () => {
     >
       <Container maxWidth="lg">
         <Grid container spacing={4}>
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid size={{ xs: 12, sm: 6, md: 3 }}>
             <Typography variant="h6" gutterBottom>
               TradeBinder
             </Typography>
@@ -29,7 +29,7 @@ const Footer: React.FC = () => {
             </Typography>
           </Grid>
           
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid size={{ xs: 12, sm: 6, md: 3 }}>
             <Typography variant="h6" gutterBottom>
               Enlaces
             </Typography>
@@ -48,7 +48,7 @@ const Footer: React.FC = () => {
             </Box>
           </Grid>
           
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid size={{ xs: 12, sm: 6, md: 3 }}>
             <Typography variant="h6" gutterBottom>
               Soporte
             </Typography>
@@ -67,7 +67,7 @@ const Footer: React.FC = () => {
             </Box>
           </Grid>
           
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid size={{ xs: 12, sm: 6, md: 3 }}>
             <Typography variant="h6" gutterBottom>
               Legal
             </Typography>
