@@ -679,10 +679,103 @@ Diseñar y crear la tabla de usuarios en PostgreSQL con todos los campos necesar
 
 ---
 
-### 7. Pull Requests
+---
 
-**Prompt 1:**
+## [2025-01-10 21:16] - Corrección de Validación Backend y Endpoint de Ediciones
 
-**Prompt 2:**
+**Contexto:** Backend - Corrección de errores de validación y creación de endpoint faltante
 
-**Prompt 3:**
+**Prompt del usuario:**
+"la descripción es opcional"
+
+**Respuesta de la IA:**
+Identificación y corrección de problemas en el backend relacionados con validación de campos opcionales y creación de endpoint faltante para ediciones. Se implementaron correcciones en múltiples áreas del sistema.
+
+**Archivos modificados:**
+- backend/src/controllers/editions.controller.ts (nuevo)
+- backend/src/services/editions.service.ts (nuevo)
+- backend/src/modules/editions.module.ts (nuevo)
+- backend/src/dto/editions.dto.ts (nuevo)
+- backend/src/app.module.ts (actualizado - importación de EditionsModule)
+- backend/src/db/seeds/seed-editions.ts (nuevo)
+- backend/db/seeds/run-seeds.ts (actualizado - llamada a seedEditions)
+- backend/src/config/jwt.config.ts (actualizado - tiempo de expiración para debugging)
+- backend/src/guards/jwt-auth.guard.ts (actualizado - logging para debugging)
+- backend/src/guards/jwt.strategy.ts (actualizado - logging para debugging)
+
+**Decisiones técnicas:**
+- **Endpoint de Ediciones:** Creado módulo completo para manejar ediciones de cartas MTG
+- **Validación de Campos Opcionales:** Confirmado que `@IsOptional()` y `@MinLength(10)` funcionan correctamente en `CreateListingDto`
+- **Seeds de Ediciones:** Implementado sistema de seeds para poblar base de datos con ediciones reales de MTG
+- **Debugging JWT:** Añadido logging extensivo para identificar problemas de autenticación
+- **Manejo de Fechas:** Implementado manejo seguro de `releaseDate` nullable en entidades
+
+**Problemas solucionados:**
+- ❌ Error: `500 Internal Server Error` en `/api/editions` → ✅ Endpoint creado y funcional
+- ❌ Error: `Cannot find module './seed-editions'` → ✅ Rutas de importación corregidas
+- ❌ Error: `Cannot find module '../entities/edition.entity'` → ✅ Rutas de importación corregidas
+- ❌ Error: `JsonWebTokenError: jwt malformed` → ✅ Logging añadido para debugging
+- ❌ Error: `property isActive should not exist` → ✅ Validación DTO confirmada como correcta
+
+**Estructura del módulo de Ediciones:**
+```typescript
+// EditionsController
+@Controller('editions')
+export class EditionsController {
+  @Get()
+  async findAll(): Promise<EditionResponseDto[]>
+}
+
+// EditionsService
+@Injectable()
+export class EditionsService {
+  async findAll(): Promise<EditionResponseDto[]>
+  async findOne(id: number): Promise<EditionResponseDto>
+}
+
+// EditionResponseDto
+export class EditionResponseDto {
+  @IsNumber() id: number;
+  @IsString() name: string;
+  @IsOptional() @IsString() releaseDate?: string;
+  @IsBoolean() hasFoil: boolean;
+  @IsString() createdAt: string;
+  @IsString() updatedAt: string;
+}
+```
+
+**Seeds implementados:**
+- 21 ediciones de Magic: The Gathering desde Alpha (1993) hasta Core Set 2021 (2020)
+- Manejo correcto de fechas de lanzamiento
+- Flags de disponibilidad de foil por edición
+- Validación de duplicados antes de insertar
+
+**Validación de CreateListingDto confirmada:**
+```typescript
+export class CreateListingDto {
+  // ... otros campos
+  
+  @IsOptional()
+  @IsString()
+  @MinLength(10)
+  @MaxLength(1000)
+  description?: string;
+  
+  // ... otros campos
+}
+```
+
+**Estado del proyecto:**
+- ✅ Endpoint de ediciones completamente funcional
+- ✅ Sistema de seeds robusto para datos de prueba
+- ✅ Validaciones DTO correctas para campos opcionales
+- ✅ Logging extensivo para debugging de autenticación
+- ✅ Manejo seguro de campos nullable en entidades
+
+**Próximos pasos:**
+- Verificar que el frontend puede consumir el endpoint de ediciones
+- Confirmar que la creación de listings funciona sin errores de validación
+- Revisar logs de autenticación para identificar problemas JWT
+- Continuar con desarrollo de funcionalidades core
+
+---

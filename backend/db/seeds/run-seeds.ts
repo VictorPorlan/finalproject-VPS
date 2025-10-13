@@ -6,6 +6,7 @@ import { Logger } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 import { User, Card, Edition, Listing } from '../../src/entities';
 import * as bcrypt from 'bcryptjs';
+import { seedEditions } from '../../src/db/seeds/seed-editions';
 
 async function runSeeds() {
   const logger = new Logger('SeedRunner');
@@ -65,19 +66,68 @@ async function runSeeds() {
     if (existingCards > 0) {
       logger.log(`🃏 Found ${existingCards} existing cards, skipping card creation`);
     } else {
-      // Create test cards (simple info)
+      // Create test cards with detailed information
       const cards = [
         {
-          name: 'Black Lotus',
-          imageUrl: 'https://example.com/black-lotus.png',
+          name: 'Lightning Bolt',
+          manaCost: '{R}',
+          type: 'Instant',
+          rarity: 'Common',
+          text: 'Lightning Bolt deals 3 damage to any target.',
+          imageUrl: 'https://cards.scryfall.io/large/front/d/5/d573ef03-4730-45aa-93dd-e45ac1dbaf4a.jpg?1559591645',
+          artist: 'Christopher Rush',
+          number: '161',
+          isActive: true,
         },
         {
-          name: 'Lightning Bolt',
-          imageUrl: 'https://example.com/lightning-bolt.png',
+          name: 'Black Lotus',
+          manaCost: '{0}',
+          type: 'Artifact',
+          rarity: 'Rare',
+          text: '{T}, Sacrifice Black Lotus: Add three mana of any one color.',
+          imageUrl: 'https://cards.scryfall.io/large/front/b/0/b0faa7f2-b547-42c4-a810-839da50dadfe.jpg?1559591477',
+          artist: 'Christopher Rush',
+          number: '232',
+          isActive: true,
         },
         {
           name: 'Counterspell',
-          imageUrl: 'https://example.com/counterspell.png',
+          manaCost: '{U}{U}',
+          type: 'Instant',
+          rarity: 'Common',
+          text: 'Counter target spell.',
+          imageUrl: 'https://cards.scryfall.io/large/front/0/d/0df55e3f-14de-46ef-b6b1-616618724d9e.jpg?1559591713',
+          artist: 'Mark Poole',
+          number: '61',
+          isActive: true,
+        },
+        {
+          name: 'Serra Angel',
+          manaCost: '{3}{W}{W}',
+          type: 'Creature — Angel',
+          subtype: 'Angel',
+          rarity: 'Uncommon',
+          text: 'Flying, vigilance',
+          power: '4',
+          toughness: '4',
+          imageUrl: 'https://cards.scryfall.io/large/front/f/8/f8ac5006-91bd-4803-93da-f87cf196dd2f.jpg?1559591394',
+          artist: 'Douglas Shuler',
+          number: '25',
+          isActive: true,
+        },
+        {
+          name: 'Shivan Dragon',
+          manaCost: '{4}{R}{R}',
+          type: 'Creature — Dragon',
+          subtype: 'Dragon',
+          rarity: 'Rare',
+          text: 'Flying\n{R}: Shivan Dragon gets +1/+0 until end of turn.',
+          power: '5',
+          toughness: '5',
+          imageUrl: 'https://cards.scryfall.io/large/front/f/e/fefbf149-f988-4f8b-9f53-56f5878116a6.jpg?1559591401',
+          artist: 'Melissa A. Benson',
+          number: '143',
+          isActive: true,
         },
       ];
       
@@ -85,33 +135,8 @@ async function runSeeds() {
       logger.log(`🃏 Created ${createdCards.length} cards`);
     }
     
-    // Check if editions already exist
-    const existingEditions = await editionRepository.count();
-    if (existingEditions > 0) {
-      logger.log(`📚 Found ${existingEditions} existing editions, skipping edition creation`);
-    } else {
-      // Create test editions (simple info)
-      const editions = [
-        {
-          name: 'Alpha',
-          releaseDate: new Date('1993-08-05'),
-          hasFoil: false,
-        },
-        {
-          name: 'Beta',
-          releaseDate: new Date('1993-10-04'),
-          hasFoil: false,
-        },
-        {
-          name: 'Unlimited',
-          releaseDate: new Date('1993-12-01'),
-          hasFoil: false,
-        },
-      ];
-      
-      const createdEditions = await editionRepository.save(editions);
-      logger.log(`📚 Created ${createdEditions.length} editions`);
-    }
+    // Seed editions using the dedicated function
+    await seedEditions(dataSource);
     
     // Check if listings already exist
     const existingListings = await listingRepository.count();

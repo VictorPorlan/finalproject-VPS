@@ -6,6 +6,11 @@ import { AppService } from './app.service';
 import { databaseConfig } from './config/database.config';
 import { User, Card, Edition, Listing, Transaction, Message, Review, Favorite } from './entities';
 import { AuthModule } from './modules/auth.module';
+import { CardsModule } from './modules/cards.module';
+import { ListingsModule } from './modules/listings.module';
+import { EditionsModule } from './modules/editions.module';
+import { TransactionsModule } from './modules/transactions.module';
+import { MessagesModule } from './modules/messages.module';
 
 @Module({
   imports: [
@@ -21,6 +26,16 @@ import { AuthModule } from './modules/auth.module';
     }),
     // Auth module
     AuthModule,
+    // Cards module
+    CardsModule,
+    // Listings module
+    ListingsModule,
+    // Editions module
+    EditionsModule,
+    // Transactions module
+    TransactionsModule,
+    // Messages module
+    MessagesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -12,7 +12,7 @@ import {
 import {
   AccountCircle,
   ShoppingCart,
-  Favorite,
+  ShoppingBag,
   Menu as MenuIcon,
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
@@ -57,30 +57,17 @@ const Header: React.FC = () => {
           TradeBinder
         </Typography>
 
-        {/* Navegación principal */}
-        <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 2 }}>
-          <Button 
-            color="inherit" 
-            onClick={() => navigate('/catalog')}
-            sx={{ textTransform: 'none' }}
-          >
-            Catálogo
-          </Button>
-          <Button 
-            color="inherit" 
-            onClick={() => navigate('/announcements')}
-            sx={{ textTransform: 'none' }}
-          >
-            Anuncios
-          </Button>
-        </Box>
 
         {/* Botones de usuario */}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
           {isAuthenticated ? (
             <>
-              <IconButton color="inherit">
-                <Favorite />
+              <IconButton 
+                color="inherit"
+                onClick={() => navigate('/my-purchases')}
+                title="Mis Compras"
+              >
+                <ShoppingBag />
               </IconButton>
               <IconButton color="inherit">
                 <ShoppingCart />
@@ -113,11 +100,27 @@ const Header: React.FC = () => {
                 <MenuItem onClick={() => { navigate('/profile'); handleClose(); }}>
                   Mi Perfil
                 </MenuItem>
+                <MenuItem onClick={() => { navigate('/my-listings'); handleClose(); }}>
+                  Mis Listings
+                </MenuItem>
+                <MenuItem onClick={() => { navigate('/transactions'); handleClose(); }}>
+                  Mis Transacciones
+                </MenuItem>
+                <MenuItem onClick={() => { navigate('/create-listing'); handleClose(); }}>
+                  Crear Listing
+                </MenuItem>
                 <MenuItem onClick={handleLogout}>Cerrar Sesión</MenuItem>
               </Menu>
             </>
           ) : (
             <>
+              <Button 
+                color="inherit" 
+                onClick={() => navigate('/')}
+                sx={{ textTransform: 'none' }}
+              >
+                Inicio
+              </Button>
               <Button 
                 color="inherit" 
                 onClick={() => navigate('/login')}

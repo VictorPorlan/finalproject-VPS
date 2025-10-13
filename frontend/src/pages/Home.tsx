@@ -27,29 +27,29 @@ const Home: React.FC = () => {
       icon: <Search sx={{ fontSize: 40 }} />,
       title: 'Buscar Cartas',
       description: 'Encuentra cualquier carta de Magic: The Gathering en nuestro catálogo completo.',
-      action: () => navigate('/catalog'),
-      buttonText: 'Explorar Catálogo',
+      action: () => navigate('/cards'),
+      buttonText: 'Buscar Cartas',
     },
     {
       icon: <Add sx={{ fontSize: 40 }} />,
       title: 'Publicar Carta',
       description: 'Vende tus cartas de forma fácil y segura con nuestra plataforma.',
-      action: () => navigate('/register'),
-      buttonText: 'Comenzar a Vender',
+      action: () => navigate(isAuthenticated ? '/create-listing' : '/register'),
+      buttonText: isAuthenticated ? 'Crear Listing' : 'Comenzar a Vender',
     },
     {
       icon: <ShoppingCart sx={{ fontSize: 40 }} />,
       title: 'Comprar Cartas',
       description: 'Encuentra las mejores ofertas de cartas de otros coleccionistas.',
-      action: () => navigate('/announcements'),
-      buttonText: 'Ver Anuncios',
+      action: () => navigate('/catalog'),
+      buttonText: 'Ver Cartas',
     },
     {
       icon: <Favorite sx={{ fontSize: 40 }} />,
       title: 'Favoritos',
       description: 'Guarda tus cartas favoritas y recibe notificaciones de nuevos anuncios.',
-      action: () => navigate('/register'),
-      buttonText: 'Crear Cuenta',
+      action: () => navigate(isAuthenticated ? '/my-listings' : '/register'),
+      buttonText: isAuthenticated ? 'Mis Listings' : 'Crear Cuenta',
     },
   ];
 
@@ -110,7 +110,7 @@ const Home: React.FC = () => {
                 color: 'white',
                 '&:hover': { borderColor: 'white', backgroundColor: 'rgba(255,255,255,0.1)' }
               }}
-              onClick={() => navigate('/catalog')}
+              onClick={() => navigate('/cards')}
             >
               Explorar Catálogo
             </Button>
@@ -126,7 +126,7 @@ const Home: React.FC = () => {
         
         <Grid container spacing={4}>
           {features.map((feature, index) => (
-            <Grid size={{ xs: 12, sm: 6, md: 3}} key={index}>
+            <Grid size={{ xs: 12, sm: 6, md: 3 }} key={index}>
               <Card
                 sx={{
                   height: '100%',
@@ -186,7 +186,7 @@ const Home: React.FC = () => {
           <Button
             variant="contained"
             size="large"
-            onClick={() => navigate(isAuthenticated ? '/catalog' : '/register')}
+            onClick={() => navigate(isAuthenticated ? '/cards' : '/register')}
             sx={{ textTransform: 'none' }}
           >
             {isAuthenticated ? 'Explorar Catálogo' : 'Crear Cuenta Gratis'}

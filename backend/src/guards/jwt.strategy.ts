@@ -12,11 +12,15 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       ignoreExpiration: false,
       secretOrKey: jwtConfig.secret || 'fallback-secret',
     });
+    console.log('JWT Strategy - Secret configured:', jwtConfig.secret ? 'Yes' : 'No');
   }
 
   async validate(payload: any) {
+    console.log('JWT Strategy - Payload received:', payload);
     const user = await this.authService.validateUser(payload.sub);
+    console.log('JWT Strategy - User found:', user ? `ID: ${user.id}` : 'null');
     if (!user) {
+      console.log('JWT Strategy - User validation failed');
       throw new UnauthorizedException();
     }
     return user;

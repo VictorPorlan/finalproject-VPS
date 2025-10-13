@@ -13,6 +13,7 @@ import {
   Visibility,
   VisibilityOff,
 } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
 
 interface FormField {
   name: string;
@@ -45,6 +46,7 @@ const AuthForm: React.FC<FormProps> = ({
   linkHref,
   linkLabel,
 }) => {
+  const navigate = useNavigate();
   const [formData, setFormData] = React.useState<Record<string, string>>({});
   const [validationErrors, setValidationErrors] = React.useState<Record<string, string>>({});
   const [showPasswords, setShowPasswords] = React.useState<Record<string, boolean>>({});
@@ -173,8 +175,16 @@ const AuthForm: React.FC<FormProps> = ({
           <Typography variant="body2" color="text.secondary">
             {linkText}{' '}
             <Button
-              component="a"
-              href={linkHref}
+              onClick={() => {
+                console.log('AuthForm: Navigating to', linkHref);
+                try {
+                  navigate(linkHref);
+                } catch (error) {
+                  console.error('Navigation error:', error);
+                  // Fallback usando window.location
+                  window.location.href = linkHref;
+                }
+              }}
               variant="text"
               sx={{ textTransform: 'none', p: 0, minWidth: 'auto' }}
             >

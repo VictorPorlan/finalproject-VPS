@@ -7,7 +7,7 @@ import AuthForm from '../components/common/AuthForm';
 
 const Register: React.FC = () => {
   const navigate = useNavigate();
-  const { register, isLoading, error, clearError } = useAuth();
+  const { register, isLoading, error, clearError, isAuthenticated } = useAuth();
   const { showSuccess, showError } = useNotification();
 
   const handleRegister = async (data: Record<string, string>) => {
@@ -20,10 +20,6 @@ const Register: React.FC = () => {
       showError(errorMessage);
     }
   };
-
-  React.useEffect(() => {
-    clearError();
-  }, [clearError]);
 
   const fields = [
     {

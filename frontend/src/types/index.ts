@@ -15,7 +15,103 @@ export interface AuthUser {
   location?: string;
 }
 
-// Card types
+// Card Base types (from backend endpoints)
+export interface CardBase {
+  id: number;
+  name: string;
+  manaCost?: string;
+  type?: string;
+  subtype?: string;
+  rarity?: string;
+  text?: string;
+  flavorText?: string;
+  power?: string;
+  toughness?: string;
+  loyalty?: number;
+  imageUrl?: string;
+  artist?: string;
+  number?: string;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// Edition types
+export interface Edition {
+  id: number;
+  name: string;
+  releaseDate?: string;
+  hasFoil: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// Listing types
+export interface Listing {
+  id: number;
+  userId: number;
+  cardId: number;
+  editionId: number;
+  condition: ListingCondition;
+  isFoil: boolean;
+  price: number;
+  quantity: number;
+  description?: string;
+  images?: string[];
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+  user?: {
+    id: number;
+    username: string;
+    location?: string;
+  };
+  cardBase?: CardBase;
+  edition?: Edition;
+}
+
+export enum ListingCondition {
+  MINT = 'mint',
+  NEAR_MINT = 'near_mint',
+  LIGHTLY_PLAYED = 'lightly_played',
+  MODERATELY_PLAYED = 'moderately_played',
+  HEAVILY_PLAYED = 'heavily_played',
+  DAMAGED = 'damaged',
+}
+
+// Search and filter types
+export interface SearchCardsParams {
+  name?: string;
+  manaCost?: string;
+  type?: string;
+  subtype?: string;
+  rarity?: string;
+  artist?: string;
+  text?: string;
+  isActive?: boolean;
+  page?: number;
+  limit?: number;
+  sortBy?: string;
+  sortOrder?: 'ASC' | 'DESC';
+}
+
+export interface SearchListingsParams {
+  cardName?: string;
+  cardId?: number;
+  editionId?: number;
+  condition?: ListingCondition;
+  isFoil?: boolean;
+  minPrice?: number;
+  maxPrice?: number;
+  location?: string;
+  isActive?: boolean;
+  page?: number;
+  limit?: number;
+  sortBy?: string;
+  sortOrder?: 'ASC' | 'DESC';
+}
+
+// Legacy Card types (for backward compatibility)
 export interface Card {
   id: number;
   name: string;
@@ -41,12 +137,25 @@ export interface Message {
   id: number;
   senderId: number;
   receiverId: number;
-  announcementId: number;
+  listingId: number;
   content: string;
+  isRead: boolean;
   createdAt: string;
-  sender?: User;
-  receiver?: User;
-  announcement?: Announcement;
+  sender?: {
+    id: number;
+    username: string;
+    email: string;
+  };
+  receiver?: {
+    id: number;
+    username: string;
+    email: string;
+  };
+  listing?: {
+    id: number;
+    title: string;
+    price: number;
+  };
 }
 
 // API Response types
@@ -79,7 +188,8 @@ export interface RegisterRequest {
 
 export interface AuthResponse {
   user: AuthUser;
-  token: string;
+  access_token: string;
+  refresh_token: string;
 }
 
 // Form types
@@ -94,7 +204,70 @@ export interface CreateAnnouncementRequest {
 }
 
 export interface SendMessageRequest {
-  announcementId: number;
+  listingId: number;
   receiverId: number;
   content: string;
+}
+
+// Transaction types
+export interface Transaction {
+  id: number;
+  listingId: number;
+  buyerId: number;
+  sellerId: number;
+  quantity: number;
+  pricePerUnit: number;
+  totalPrice: number;
+  status: TransactionStatus;
+  paymentMethod?: string;
+  shippingAddress?: string;
+  trackingNumber?: string;
+  createdAt: string;
+  updatedAt: string;
+  listing?: Listing;
+  buyer?: User;
+  seller?: User;
+}
+
+export enum TransactionStatus {
+  PENDING = 'pending',
+  CONFIRMED = 'confirmed',
+  DELIVERED = 'delivered',
+  CANCELLED = 'cancelled',
+}
+
+export interface CreateTransactionRequest {
+  listingId: number;
+  quantity: number;
+  paymentMethod: string;
+  shippingAddress: string;
+}
+
+export interface UpdateTransactionStatusRequest {
+  status: TransactionStatus;
+}
+
+export interface CompleteTransactionRequest {
+  trackingNumber?: string;
+}
+
+export interface SearchTransactionsParams {
+  status?: TransactionStatus;
+  type?: 'buyer' | 'seller' | 'all';
+  page?: number;
+  limit?: number;
+  sortBy?: string;
+  sortOrder?: 'ASC' | 'DESC';
+}
+
+// Card selection types for listings
+export interface CardSelection {
+  card: CardBase;
+  edition: Edition;
+  condition: ListingCondition;
+  isFoil: boolean;
+  price: number;
+  quantity: number;
+  description?: string;
+  images?: string[];
 }

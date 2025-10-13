@@ -10,27 +10,15 @@ const Login: React.FC = () => {
   const { login, isLoading, error, clearError, isAuthenticated } = useAuth();
   const { showSuccess, showError } = useNotification();
 
-  // Redirigir automáticamente cuando el usuario se autentica
-  React.useEffect(() => {
-    if (isAuthenticated) {
-      showSuccess('¡Bienvenido! Has iniciado sesión correctamente.');
-      navigate('/');
-    }
-  }, [isAuthenticated, navigate, showSuccess]);
-
   const handleLogin = async (data: Record<string, string>) => {
     try {
       await login(data.email, data.password);
-      // La redirección se maneja en el useEffect
+      showSuccess('¡Bienvenido! Has iniciado sesión correctamente.');
     } catch (error: any) {
       const errorMessage = error.response?.data?.message || 'Error al iniciar sesión';
       showError(errorMessage);
     }
   };
-
-  React.useEffect(() => {
-    clearError();
-  }, [clearError]);
 
   const fields = [
     {
