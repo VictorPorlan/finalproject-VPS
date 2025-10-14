@@ -1,5 +1,5 @@
 import { DataSource } from 'typeorm';
-import { User, Card, Edition, Listing, Transaction, Message, Review, Favorite } from './src/entities';
+import { User, Card, Edition, Listing, Transaction, Message, Review, Favorite, Location } from './src/entities';
 
 export default new DataSource({
   type: 'postgres',
@@ -8,7 +8,7 @@ export default new DataSource({
   username: process.env.DB_USERNAME || 'postgres',
   password: process.env.DB_PASSWORD || 'password',
   database: process.env.DB_NAME || 'tradebinder',
-  entities: [User, Card, Edition, Listing, Transaction, Message, Review, Favorite],
+  entities: [User, Card, Edition, Listing, Transaction, Message, Review, Favorite, Location],
   migrations: ['db/migrations/*{.ts,.js}'],
   migrationsTableName: 'migrations',
   migrationsRun: false,

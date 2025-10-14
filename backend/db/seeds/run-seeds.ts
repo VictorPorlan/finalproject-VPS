@@ -4,9 +4,10 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from '../../src/app.module';
 import { Logger } from '@nestjs/common';
 import { DataSource } from 'typeorm';
-import { User, Card, Edition, Listing } from '../../src/entities';
+import { User, Card, Edition, Listing, Location } from '../../src/entities';
 import * as bcrypt from 'bcryptjs';
 import { seedEditions } from '../../src/db/seeds/seed-editions';
+import { seedLocations } from '../../src/db/seeds/seed-locations';
 
 async function runSeeds() {
   const logger = new Logger('SeedRunner');
@@ -22,8 +23,21 @@ async function runSeeds() {
     const cardRepository = dataSource.getRepository(Card);
     const editionRepository = dataSource.getRepository(Edition);
     const listingRepository = dataSource.getRepository(Listing);
+    const locationRepository = dataSource.getRepository(Location);
     
     logger.log('📋 Checking existing data...');
+    
+    // Seed locations first
+    await seedLocations(dataSource);
+    
+    // Get Mallorca location for users
+    const mallorcaLocation = await locationRepository.findOne({
+      where: { name: 'Mallorca' },
+    });
+    
+    if (!mallorcaLocation) {
+      throw new Error('Mallorca location not found. Please run location seeds first.');
+    }
     
     // Check if users already exist
     const existingUsers = await userRepository.count();
@@ -31,28 +45,28 @@ async function runSeeds() {
       logger.log(`👥 Found ${existingUsers} existing users, skipping user creation`);
     } else {
       // Create test users
-      const hashedPassword = await bcrypt.hash('password123', 10);
+      const hashedPassword = await bcrypt.hash('', 10);
       
       const users = [
         {
           email: 'admin@tradebinder.com',
           username: 'admin',
           password: hashedPassword,
-          location: 'Madrid, España',
+          locationId: mallorcaLocation.id,
           isActive: true,
         },
         {
           email: 'john@example.com',
           username: 'john_doe',
           password: hashedPassword,
-          location: 'Barcelona, España',
+          locationId: mallorcaLocation.id,
           isActive: true,
         },
         {
           email: 'jane@example.com',
           username: 'jane_smith',
           password: hashedPassword,
-          location: 'Valencia, España',
+          locationId: mallorcaLocation.id,
           isActive: true,
         },
       ];
@@ -154,11 +168,12 @@ async function runSeeds() {
           userId: users[0].id,
           cardId: cards[0].id,
           editionId: editions[0].id, // Black Lotus - Alpha
+          locationId: mallorcaLocation.id,
           condition: 'near_mint',
           isFoil: false,
           price: 2500.00,
           quantity: 1,
-          description: 'Black Lotus Alpha en perfecto estado. Disponible para entrega en Madrid.',
+          description: 'Black Lotus Alpha en perfecto estado. Disponible para entrega en Mallorca.',
           images: ['https://example.com/user-black-lotus-1.jpg', 'https://example.com/user-black-lotus-2.jpg'],
           isActive: true,
         },
@@ -166,6 +181,7 @@ async function runSeeds() {
           userId: users[1].id,
           cardId: cards[1].id,
           editionId: editions[1].id, // Lightning Bolt - Beta
+          locationId: mallorcaLocation.id,
           condition: 'lightly_played',
           isFoil: false,
           price: 150.00,
@@ -178,6 +194,7 @@ async function runSeeds() {
           userId: users[2].id,
           cardId: cards[2].id,
           editionId: editions[2].id, // Counterspell - Unlimited
+          locationId: mallorcaLocation.id,
           condition: 'near_mint',
           isFoil: false,
           price: 75.00,
@@ -197,9 +214,11 @@ async function runSeeds() {
     const finalCardCount = await cardRepository.count();
     const finalEditionCount = await editionRepository.count();
     const finalListingCount = await listingRepository.count();
+    const finalLocationCount = await locationRepository.count();
     
     logger.log('✅ Database seeding completed successfully');
     logger.log('📊 Summary:');
+    logger.log(`   - Locations: ${finalLocationCount}`);
     logger.log(`   - Users: ${finalUserCount}`);
     logger.log(`   - Cards: ${finalCardCount}`);
     logger.log(`   - Editions: ${finalEditionCount}`);

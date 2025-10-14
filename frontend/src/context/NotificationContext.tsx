@@ -35,7 +35,10 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({ chil
   };
 
   const showSuccess = (message: string) => showNotification(message, 'success');
-  const showError = (message: string) => showNotification(message, 'error');
+  const showError = (message: string) => {
+    console.log('NotificationContext: showError called with message:', message);
+    showNotification(message, 'error');
+  };
   const showInfo = (message: string) => showNotification(message, 'info');
   const showWarning = (message: string) => showNotification(message, 'warning');
 

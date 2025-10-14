@@ -5,6 +5,8 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
+  ManyToOne,
+  JoinColumn,
   Index,
 } from 'typeorm';
 import { Listing } from './listing.entity';
@@ -12,10 +14,12 @@ import { Message } from './message.entity';
 import { Review } from './review.entity';
 import { Favorite } from './favorite.entity';
 import { Transaction } from './transaction.entity';
+import { Location } from './location.entity';
 
 @Entity('users')
 @Index(['email'], { unique: true })
 @Index(['username'], { unique: true })
+@Index(['locationId'])
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
@@ -29,8 +33,8 @@ export class User {
   @Column()
   password: string;
 
-  @Column({ nullable: true })
-  location: string;
+  @Column()
+  locationId: number;
 
   @Column({ nullable: true })
   avatar: string;
@@ -45,6 +49,10 @@ export class User {
   updatedAt: Date;
 
   // Relaciones
+  @ManyToOne(() => Location, (location) => location.users)
+  @JoinColumn({ name: 'locationId' })
+  location: Location;
+
   @OneToMany(() => Listing, (listing) => listing.user)
   listings: Listing[];
 

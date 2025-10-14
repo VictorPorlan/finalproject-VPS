@@ -57,7 +57,7 @@ const Profile: React.FC = () => {
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                 <LocationOn sx={{ mr: 1, color: 'text.secondary' }} />
                 <Typography variant="body1">
-                  <strong>Ubicación:</strong> {user.location}
+                  <strong>Ubicación:</strong> {user.location.name}
                 </Typography>
               </Box>
             )}

@@ -312,7 +312,7 @@ const TransactionDetail: React.FC = () => {
                   <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
                     <LocationOn sx={{ fontSize: '1rem', mr: 1 }} />
                     <Typography variant="body2" color="text.secondary">
-                      {transaction.buyer.location}
+                      {transaction.buyer.location.name}
                     </Typography>
                   </Box>
                 )}
@@ -337,7 +337,7 @@ const TransactionDetail: React.FC = () => {
                   <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
                     <LocationOn sx={{ fontSize: '1rem', mr: 1 }} />
                     <Typography variant="body2" color="text.secondary">
-                      {transaction.seller.location}
+                      {transaction.seller.location.name}
                     </Typography>
                   </Box>
                 )}

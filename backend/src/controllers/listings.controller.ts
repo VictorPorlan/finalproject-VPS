@@ -23,6 +23,7 @@ import {
 } from '../dto/listings.dto';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import { GetUser } from '../decorators/get-user.decorator';
+import { Public } from '../decorators/public.decorator';
 
 @Controller('listings')
 @UseGuards(JwtAuthGuard)
@@ -38,8 +39,12 @@ export class ListingsController {
   }
 
   @Get()
-  async findAll(@Query() searchDto: SearchListingsDto): Promise<PaginatedListingsResponseDto> {
-    return this.listingsService.findAll(searchDto);
+  @Public()
+  async findAll(
+    @Query() searchDto: SearchListingsDto,
+    @GetUser('locationId') userLocationId?: number,
+  ): Promise<PaginatedListingsResponseDto> {
+    return this.listingsService.findAll(searchDto, userLocationId);
   }
 
   @Get('my-listings')
@@ -52,13 +57,18 @@ export class ListingsController {
   }
 
   @Get('available')
-  async findAvailable(@Query() searchDto: SearchListingsDto): Promise<PaginatedListingsResponseDto> {
+  @Public()
+  async findAvailable(
+    @Query() searchDto: SearchListingsDto,
+    @GetUser('locationId') userLocationId?: number,
+  ): Promise<PaginatedListingsResponseDto> {
     // Solo mostrar listings disponibles para compra
     const availableSearchDto = { ...searchDto, isActive: true };
-    return this.listingsService.findAll(availableSearchDto);
+    return this.listingsService.findAll(availableSearchDto, userLocationId);
   }
 
   @Get('search')
+  @Public()
   async searchListings(@Query() searchDto: SearchListingsDto): Promise<PaginatedListingsResponseDto> {
     // Búsqueda avanzada para compra con filtros específicos
     const advancedSearchDto = { ...searchDto, isActive: true };
@@ -66,11 +76,13 @@ export class ListingsController {
   }
 
   @Get('stats')
+  @Public()
   async getStats(): Promise<{ total: number; active: number; inactive: number; totalValue: number }> {
     return this.listingsService.getListingStats();
   }
 
   @Get(':id')
+  @Public()
   async findOne(@Param('id', ParseIntPipe) id: number): Promise<ListingResponseDto> {
     return this.listingsService.findOne(id);
   }

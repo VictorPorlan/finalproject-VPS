@@ -8,6 +8,10 @@ import {
   CircularProgress,
   IconButton,
   InputAdornment,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
 } from '@mui/material';
 import {
   Visibility,
@@ -15,12 +19,18 @@ import {
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 
+interface SelectOption {
+  value: string;
+  label: string;
+}
+
 interface FormField {
   name: string;
   label: string;
-  type: 'text' | 'email' | 'password';
+  type: 'text' | 'email' | 'password' | 'select';
   required?: boolean;
   placeholder?: string;
+  options?: SelectOption[];
 }
 
 interface FormProps {
@@ -46,18 +56,25 @@ const AuthForm: React.FC<FormProps> = ({
   linkHref,
   linkLabel,
 }) => {
+  console.log('AuthForm: Received error prop:', error);
   const navigate = useNavigate();
   const [formData, setFormData] = React.useState<Record<string, string>>({});
   const [validationErrors, setValidationErrors] = React.useState<Record<string, string>>({});
   const [showPasswords, setShowPasswords] = React.useState<Record<string, boolean>>({});
 
-  const handleChange = (fieldName: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (fieldName: string) => (event: any) => {
     const value = event.target.value;
     setFormData(prev => ({ ...prev, [fieldName]: value }));
     
     // Clear validation error when user starts typing
     if (validationErrors[fieldName]) {
       setValidationErrors(prev => ({ ...prev, [fieldName]: '' }));
+    }
+    
+    // Clear global error when user starts typing
+    if (error) {
+      // Note: We can't clear the error here because it comes from props
+      // The parent component should handle clearing errors
     }
   };
 
@@ -119,39 +136,65 @@ const AuthForm: React.FC<FormProps> = ({
         </Alert>
       )}
 
-      {fields.map((field) => (
-        <TextField
-          key={field.name}
-          name={field.name}
-          label={field.label}
-          type={field.type === 'password' && showPasswords[field.name] ? 'text' : field.type}
-          placeholder={field.placeholder}
-          value={formData[field.name] || ''}
-          onChange={handleChange(field.name)}
-          error={!!validationErrors[field.name]}
-          helperText={validationErrors[field.name]}
-          required={field.required}
-          fullWidth
-          variant="outlined"
-          InputProps={
-            field.type === 'password'
-              ? {
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        aria-label="toggle password visibility"
-                        onClick={() => togglePasswordVisibility(field.name)}
-                        edge="end"
-                      >
-                        {showPasswords[field.name] ? <VisibilityOff /> : <Visibility />}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }
-              : undefined
-          }
-        />
-      ))}
+      {fields.map((field) => {
+        if (field.type === 'select') {
+          return (
+            <FormControl key={field.name} fullWidth error={!!validationErrors[field.name]}>
+              <InputLabel required={field.required}>{field.label}</InputLabel>
+              <Select
+                value={formData[field.name] || ''}
+                onChange={handleChange(field.name)}
+                label={field.label}
+              >
+                {field.options?.map((option) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </Select>
+              {validationErrors[field.name] && (
+                <Typography variant="caption" color="error" sx={{ mt: 0.5, ml: 1.5 }}>
+                  {validationErrors[field.name]}
+                </Typography>
+              )}
+            </FormControl>
+          );
+        }
+
+        return (
+          <TextField
+            key={field.name}
+            name={field.name}
+            label={field.label}
+            type={field.type === 'password' && showPasswords[field.name] ? 'text' : field.type}
+            placeholder={field.placeholder}
+            value={formData[field.name] || ''}
+            onChange={handleChange(field.name)}
+            error={!!validationErrors[field.name]}
+            helperText={validationErrors[field.name]}
+            required={field.required}
+            fullWidth
+            variant="outlined"
+            InputProps={
+              field.type === 'password'
+                ? {
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label="toggle password visibility"
+                          onClick={() => togglePasswordVisibility(field.name)}
+                          edge="end"
+                        >
+                          {showPasswords[field.name] ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }
+                : undefined
+            }
+          />
+        );
+      })}
 
       <Button
         type="submit"

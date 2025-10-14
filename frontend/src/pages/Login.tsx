@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Container } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
@@ -10,12 +10,24 @@ const Login: React.FC = () => {
   const { login, isLoading, error, clearError, isAuthenticated } = useAuth();
   const { showSuccess, showError } = useNotification();
 
+  // Limpiar errores cuando el componente se monta
+  useEffect(() => {
+    clearError();
+  }, [clearError]);
+
   const handleLogin = async (data: Record<string, string>) => {
     try {
+      console.log('Login: Starting login process');
+      clearError(); // Limpiar errores previos
       await login(data.email, data.password);
+      console.log('Login: Login successful');
       showSuccess('¡Bienvenido! Has iniciado sesión correctamente.');
     } catch (error: any) {
-      const errorMessage = error.response?.data?.message || 'Error al iniciar sesión';
+      console.log('Login: Login failed', error);
+      console.log('Login: Error response', error.response);
+      console.log('Login: Error message', error.message);
+      const errorMessage = error.response?.data?.message || error.message || 'Error al iniciar sesión';
+      console.log('Login: Final error message', errorMessage);
       showError(errorMessage);
     }
   };

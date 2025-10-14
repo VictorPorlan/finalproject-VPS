@@ -1,9 +1,20 @@
+// Location types
+export interface Location {
+  id: number;
+  name: string;
+  description?: string;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
 // User types
 export interface User {
   id: number;
   email: string;
   username: string;
-  location?: string;
+  locationId: number;
+  location?: Location;
   createdAt: string;
   updatedAt: string;
 }
@@ -12,7 +23,8 @@ export interface AuthUser {
   id: number;
   email: string;
   username: string;
-  location?: string;
+  locationId: number;
+  location?: Location;
 }
 
 // Card Base types (from backend endpoints)
@@ -52,6 +64,7 @@ export interface Listing {
   userId: number;
   cardId: number;
   editionId: number;
+  locationId: number;
   condition: ListingCondition;
   isFoil: boolean;
   price: number;
@@ -64,10 +77,11 @@ export interface Listing {
   user?: {
     id: number;
     username: string;
-    location?: string;
+    location?: Location;
   };
   cardBase?: CardBase;
   edition?: Edition;
+  location?: Location;
 }
 
 export enum ListingCondition {
@@ -99,11 +113,11 @@ export interface SearchListingsParams {
   cardName?: string;
   cardId?: number;
   editionId?: number;
+  locationId?: number;
   condition?: ListingCondition;
   isFoil?: boolean;
   minPrice?: number;
   maxPrice?: number;
-  location?: string;
   isActive?: boolean;
   page?: number;
   limit?: number;
@@ -183,7 +197,7 @@ export interface RegisterRequest {
   email: string;
   username: string;
   password: string;
-  location?: string;
+  locationId: number;
 }
 
 export interface AuthResponse {

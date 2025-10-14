@@ -1,9 +1,10 @@
-import { Injectable, UnauthorizedException, ConflictException } from '@nestjs/common';
+import { Injectable, UnauthorizedException, ConflictException, NotFoundException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 import { User } from '../entities/user.entity';
+import { Location } from '../entities/location.entity';
 import { RegisterDto, LoginDto, AuthResponseDto } from '../dto/auth.dto';
 import { jwtConfig, jwtRefreshConfig } from '../config/jwt.config';
 
@@ -12,11 +13,22 @@ export class AuthService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
+    @InjectRepository(Location)
+    private locationRepository: Repository<Location>,
     private jwtService: JwtService,
   ) {}
 
   async register(registerDto: RegisterDto): Promise<AuthResponseDto> {
-    const { email, username, password, location } = registerDto;
+    const { email, username, password, locationId } = registerDto;
+
+    // Verificar que la ubicación existe
+    const location = await this.locationRepository.findOne({
+      where: { id: locationId, isActive: true },
+    });
+
+    if (!location) {
+      throw new NotFoundException('Location not found or inactive');
+    }
 
     // Verificar si el usuario ya existe
     const existingUser = await this.userRepository.findOne({
@@ -40,7 +52,7 @@ export class AuthService {
       email,
       username,
       password: hashedPassword,
-      location,
+      locationId,
     });
 
     const savedUser = await this.userRepository.save(user);
@@ -54,7 +66,11 @@ export class AuthService {
         id: savedUser.id,
         email: savedUser.email,
         username: savedUser.username,
-        location: savedUser.location,
+        locationId: savedUser.locationId,
+        location: {
+          id: location.id,
+          name: location.name,
+        },
         avatar: savedUser.avatar,
       },
     };
@@ -63,9 +79,10 @@ export class AuthService {
   async login(loginDto: LoginDto): Promise<AuthResponseDto> {
     const { email, password } = loginDto;
 
-    // Buscar usuario
+    // Buscar usuario con relación a location
     const user = await this.userRepository.findOne({
       where: { email },
+      relations: ['location'],
     });
 
     if (!user) {
@@ -92,7 +109,11 @@ export class AuthService {
         id: user.id,
         email: user.email,
         username: user.username,
-        location: user.location,
+        locationId: user.locationId,
+        location: user.location ? {
+          id: user.location.id,
+          name: user.location.name,
+        } : undefined,
         avatar: user.avatar,
       },
     };

@@ -12,7 +12,7 @@ interface AuthState {
 
 interface AuthContextType extends AuthState {
   login: (email: string, password: string) => Promise<void>;
-  register: (email: string, username: string, password: string, location?: string) => Promise<AuthResponse>;
+  register: (email: string, username: string, password: string, locationId: number) => Promise<AuthResponse>;
   logout: () => void;
   clearError: () => void;
 }
@@ -128,21 +128,28 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       console.log('AuthContext: Login state updated');
     } catch (error: any) {
       console.log('AuthContext: Login failed', error);
-      const errorMessage = error.response?.data?.message || 'Login failed';
+      console.log('AuthContext: Error response', error.response);
+      console.log('AuthContext: Error response data', error.response?.data);
+      const errorMessage = error.response?.data?.message || error.message || 'Error al iniciar sesión';
+      console.log('AuthContext: Final error message', errorMessage);
       dispatch({ type: 'AUTH_FAILURE', payload: errorMessage });
       throw error;
     }
   };
 
-  const register = async (email: string, username: string, password: string, location?: string) => {
+  const register = async (email: string, username: string, password: string, locationId: number) => {
     try {
       dispatch({ type: 'AUTH_START' });
-      const response = await apiService.register({ email, username, password, location });
+      const response = await apiService.register({ email, username, password, locationId });
       // No hacer login automático después del registro
       dispatch({ type: 'AUTH_INIT_COMPLETE' }); // Marcar como completado sin error
       return response; // Devolver la respuesta para mostrar éxito
     } catch (error: any) {
-      const errorMessage = error.response?.data?.message || 'Registration failed';
+      console.log('AuthContext: Register failed', error);
+      console.log('AuthContext: Error response', error.response);
+      console.log('AuthContext: Error response data', error.response?.data);
+      const errorMessage = error.response?.data?.message || error.message || 'Error al crear la cuenta';
+      console.log('AuthContext: Final error message', errorMessage);
       dispatch({ type: 'AUTH_FAILURE', payload: errorMessage });
       throw error;
     }

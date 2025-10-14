@@ -281,7 +281,7 @@ const ListingDetail: React.FC = () => {
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 1 }}>
                     <LocationOn sx={{ fontSize: '1rem' }} />
                     <Typography variant="body2" color="text.secondary">
-                      {listing.user.location}
+                      {listing.user.location.name}
                     </Typography>
                   </Box>
                 )}

@@ -183,7 +183,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
           <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
             <LocationOn sx={{ fontSize: '1rem', mr: 0.5, color: 'text.secondary' }} />
             <Typography variant="body2" color="text.secondary">
-              {listing.user.location}
+              {listing.user.location.name}
             </Typography>
           </Box>
         )}

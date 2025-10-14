@@ -96,7 +96,7 @@ const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
     if (filters.minPrice || filters.maxPrice) count++;
     if (filters.condition) count++;
     if (filters.isFoil !== undefined) count++;
-    if (filters.location) count++;
+    if (filters.locationId) count++;
     return count;
   };
 
@@ -143,8 +143,8 @@ const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
                 <TextField
                   fullWidth
                   label="Ubicación"
-                  value={filters.location || ''}
-                  onChange={(e) => handleFilterChange('location', e.target.value)}
+                  value={filters.locationId || ''}
+                  onChange={(e) => handleFilterChange('locationId', e.target.value)}
                   placeholder="Ej: Madrid, Barcelona"
                 />
               </Grid>

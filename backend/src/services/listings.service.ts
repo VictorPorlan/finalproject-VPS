@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException, ForbiddenException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Like, Between, In } from 'typeorm';
-import { Listing, User, Card, Edition } from '../entities';
+import { Listing, User, Card, Edition, Location } from '../entities';
 import { 
   CreateListingDto, 
   UpdateListingDto, 
@@ -24,6 +24,8 @@ export class ListingsService {
     private readonly cardRepository: Repository<Card>,
     @InjectRepository(Edition)
     private readonly editionRepository: Repository<Edition>,
+    @InjectRepository(Location)
+    private readonly locationRepository: Repository<Location>,
   ) {}
 
   async create(userId: number, createListingDto: CreateListingDto): Promise<ListingResponseDto> {
@@ -45,6 +47,14 @@ export class ListingsService {
       throw new NotFoundException('Edition not found');
     }
 
+    // Verificar que la ubicación existe
+    const location = await this.locationRepository.findOne({ 
+      where: { id: createListingDto.locationId, isActive: true } 
+    });
+    if (!location) {
+      throw new NotFoundException('Location not found or inactive');
+    }
+
     // Crear el listing
     const listing = this.listingRepository.create({
       ...createListingDto,
@@ -56,16 +66,16 @@ export class ListingsService {
     return this.formatListingResponse(savedListing);
   }
 
-  async findAll(searchDto: SearchListingsDto): Promise<PaginatedListingsResponseDto> {
+  async findAll(searchDto: SearchListingsDto, userLocationId?: number): Promise<PaginatedListingsResponseDto> {
     const {
       cardName,
       cardId,
       editionId,
+      locationId,
       condition,
       isFoil,
       minPrice,
       maxPrice,
-      location,
       isActive,
       page = 1,
       limit = 20,
@@ -76,8 +86,17 @@ export class ListingsService {
     const queryBuilder = this.listingRepository
       .createQueryBuilder('listing')
       .leftJoinAndSelect('listing.user', 'user')
+      .leftJoinAndSelect('user.location', 'userLocation')
       .leftJoinAndSelect('listing.card', 'card')
-      .leftJoinAndSelect('listing.edition', 'edition');
+      .leftJoinAndSelect('listing.edition', 'edition')
+      .leftJoinAndSelect('listing.location', 'location');
+
+    // Filtrar por ubicación del usuario si no se especifica otra ubicación
+    if (userLocationId && !locationId) {
+      queryBuilder.andWhere('listing.locationId = :userLocationId', { userLocationId });
+    } else if (locationId) {
+      queryBuilder.andWhere('listing.locationId = :locationId', { locationId });
+    }
 
     // Aplicar filtros
     if (cardName) {
@@ -106,10 +125,6 @@ export class ListingsService {
 
     if (maxPrice !== undefined) {
       queryBuilder.andWhere('listing.price <= :maxPrice', { maxPrice });
-    }
-
-    if (location) {
-      queryBuilder.andWhere('user.location ILIKE :location', { location: `%${location}%` });
     }
 
     if (isActive !== undefined) {
@@ -152,7 +167,7 @@ export class ListingsService {
   async findOne(id: number): Promise<ListingResponseDto> {
     const listing = await this.listingRepository.findOne({
       where: { id },
-      relations: ['user', 'card', 'edition'],
+      relations: ['user', 'user.location', 'card', 'edition', 'location'],
     });
 
     if (!listing) {
@@ -165,7 +180,7 @@ export class ListingsService {
   async update(userId: number, id: number, updateListingDto: UpdateListingDto): Promise<ListingResponseDto> {
     const listing = await this.listingRepository.findOne({
       where: { id },
-      relations: ['user', 'card', 'edition'],
+      relations: ['user', 'user.location', 'card', 'edition', 'location'],
     });
 
     if (!listing) {
@@ -202,7 +217,7 @@ export class ListingsService {
   async updateStatus(userId: number, id: number, updateStatusDto: UpdateListingStatusDto): Promise<ListingResponseDto> {
     const listing = await this.listingRepository.findOne({
       where: { id },
-      relations: ['user', 'card', 'edition'],
+      relations: ['user', 'user.location', 'card', 'edition', 'location'],
     });
 
     if (!listing) {
@@ -236,8 +251,10 @@ export class ListingsService {
     const queryBuilder = this.listingRepository
       .createQueryBuilder('listing')
       .leftJoinAndSelect('listing.user', 'user')
+      .leftJoinAndSelect('user.location', 'userLocation')
       .leftJoinAndSelect('listing.card', 'card')
       .leftJoinAndSelect('listing.edition', 'edition')
+      .leftJoinAndSelect('listing.location', 'location')
       .where('listing.userId = :userId', { userId })
       .andWhere((qb) => {
         const subQuery = qb.subQuery()
@@ -295,6 +312,7 @@ export class ListingsService {
       userId: listing.userId,
       cardId: listing.cardId,
       editionId: listing.editionId,
+      locationId: listing.locationId,
       condition: listing.condition as ListingCondition,
       isFoil: listing.isFoil,
       price: listing.price,
@@ -307,7 +325,10 @@ export class ListingsService {
       user: listing.user ? {
         id: listing.user.id,
         username: listing.user.username,
-        location: listing.user.location,
+        location: listing.user.location ? {
+          id: listing.user.location.id,
+          name: listing.user.location.name,
+        } : undefined,
       } : undefined,
       cardBase: listing.card ? {
         id: listing.card.id,
@@ -322,6 +343,10 @@ export class ListingsService {
         name: listing.edition.name,
         releaseDate: listing.edition.releaseDate,
         hasFoil: listing.edition.hasFoil,
+      } : undefined,
+      location: listing.location ? {
+        id: listing.location.id,
+        name: listing.location.name,
       } : undefined,
     };
   }

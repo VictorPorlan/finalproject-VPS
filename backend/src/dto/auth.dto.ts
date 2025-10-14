@@ -1,4 +1,4 @@
-import { IsEmail, IsString, MinLength, IsOptional } from 'class-validator';
+import { IsEmail, IsString, MinLength, IsOptional, IsNumber } from 'class-validator';
 
 export class RegisterDto {
   @IsEmail()
@@ -12,9 +12,8 @@ export class RegisterDto {
   @MinLength(6)
   password: string;
 
-  @IsOptional()
-  @IsString()
-  location?: string;
+  @IsNumber()
+  locationId: number;
 }
 
 export class LoginDto {
@@ -32,7 +31,11 @@ export class AuthResponseDto {
     id: number;
     email: string;
     username: string;
-    location?: string;
+    locationId: number;
+    location?: {
+      id: number;
+      name: string;
+    };
     avatar?: string;
   };
 }

@@ -52,7 +52,7 @@ const Catalog: React.FC = () => {
 
     // Aplicar parámetros de URL si existen
     if (cardName) initialFilters.cardName = cardName;
-    if (location) initialFilters.location = location;
+    if (location) initialFilters.locationId = parseInt(location);
     if (minPrice) initialFilters.minPrice = parseFloat(minPrice);
     if (maxPrice) initialFilters.maxPrice = parseFloat(maxPrice);
     if (condition) initialFilters.condition = condition as any;

@@ -41,6 +41,11 @@ export class CreateListingDto {
   @Type(() => Number)
   editionId: number;
 
+  @IsNumber()
+  @IsPositive()
+  @Type(() => Number)
+  locationId: number;
+
   @IsEnum(ListingCondition)
   condition: ListingCondition;
 
@@ -77,6 +82,12 @@ export class CreateListingDto {
 }
 
 export class UpdateListingDto {
+  @IsOptional()
+  @IsNumber()
+  @IsPositive()
+  @Type(() => Number)
+  locationId?: number;
+
   @IsOptional()
   @IsEnum(ListingCondition)
   condition?: ListingCondition;
@@ -137,6 +148,11 @@ export class SearchListingsDto {
   editionId?: number;
 
   @IsOptional()
+  @IsNumber()
+  @Type(() => Number)
+  locationId?: number;
+
+  @IsOptional()
   @IsEnum(ListingCondition)
   condition?: ListingCondition;
 
@@ -193,6 +209,7 @@ export class ListingResponseDto {
   userId: number;
   cardId: number;
   editionId: number;
+  locationId: number;
   condition: ListingCondition;
   isFoil: boolean;
   price: number;
@@ -207,7 +224,10 @@ export class ListingResponseDto {
   user?: {
     id: number;
     username: string;
-    location?: string;
+    location?: {
+      id: number;
+      name: string;
+    };
   };
   
   cardBase?: {
@@ -224,6 +244,11 @@ export class ListingResponseDto {
     name: string;
     releaseDate?: Date;
     hasFoil: boolean;
+  };
+
+  location?: {
+    id: number;
+    name: string;
   };
 }
 

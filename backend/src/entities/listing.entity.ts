@@ -12,6 +12,7 @@ import {
 import { User } from './user.entity';
 import { Card } from './card-base.entity';
 import { Edition } from './edition.entity';
+import { Location } from './location.entity';
 import { Transaction } from './transaction.entity';
 import { Message } from './message.entity';
 import { Favorite } from './favorite.entity';
@@ -20,6 +21,7 @@ import { Favorite } from './favorite.entity';
 @Index(['userId'])
 @Index(['cardId'])
 @Index(['editionId'])
+@Index(['locationId'])
 @Index(['condition'])
 @Index(['isActive'])
 @Index(['createdAt'])
@@ -35,6 +37,9 @@ export class Listing {
 
   @Column()
   editionId: number;
+
+  @Column()
+  locationId: number;
 
   @Column({
     type: 'enum',
@@ -79,6 +84,10 @@ export class Listing {
   @ManyToOne(() => Edition, (edition) => edition.listings)
   @JoinColumn({ name: 'editionId' })
   edition: Edition;
+
+  @ManyToOne(() => Location, (location) => location.listings)
+  @JoinColumn({ name: 'locationId' })
+  location: Location;
 
   @OneToMany(() => Transaction, (transaction) => transaction.listing)
   transactions: Transaction[];

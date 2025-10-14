@@ -20,10 +20,10 @@ export const useAuthActions = () => {
     email: string, 
     username: string, 
     password: string, 
-    location?: string
+    locationId: number
   ) => {
     try {
-      await register(email, username, password, location);
+      await register(email, username, password, locationId);
       navigate('/profile');
     } catch (error) {
       // Error is handled by AuthContext

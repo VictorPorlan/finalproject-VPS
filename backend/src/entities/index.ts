@@ -6,3 +6,4 @@ export { Transaction } from './transaction.entity';
 export { Message } from './message.entity';
 export { Review } from './review.entity';
 export { Favorite } from './favorite.entity';
+export { Location } from './location.entity';

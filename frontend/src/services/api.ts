@@ -12,6 +12,7 @@ import {
   CardBase,
   Edition,
   Listing,
+  Location,
   SearchCardsParams,
   SearchListingsParams,
   Transaction,
@@ -80,6 +81,12 @@ class ApiService {
 
   async getCurrentUser(): Promise<AuthUser> {
     const response: AxiosResponse<AuthUser> = await this.api.get('/auth/me');
+    return response.data;
+  }
+
+  // Locations endpoints
+  async getLocations(): Promise<Location[]> {
+    const response: AxiosResponse<Location[]> = await this.api.get('/auth/locations');
     return response.data;
   }
 

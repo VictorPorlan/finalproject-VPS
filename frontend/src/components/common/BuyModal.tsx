@@ -32,7 +32,6 @@ const BuyModal: React.FC<BuyModalProps> = ({
   listing,
   onConfirm,
 }) => {
-  const [quantity, setQuantity] = useState(1);
   const [paymentMethod, setPaymentMethod] = useState('');
   const [contactInfo, setContactInfo] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -52,7 +51,7 @@ const BuyModal: React.FC<BuyModalProps> = ({
     try {
       const transactionData: CreateTransactionRequest = {
         listingId: listing.id,
-        quantity,
+        quantity: 1, // Siempre comprar 1 unidad
         paymentMethod,
         shippingAddress: contactInfo,
       };
@@ -68,7 +67,6 @@ const BuyModal: React.FC<BuyModalProps> = ({
 
   const handleClose = () => {
     // Reset form when closing
-    setQuantity(1);
     setPaymentMethod('');
     setContactInfo('');
     setError(null);
@@ -86,19 +84,9 @@ const BuyModal: React.FC<BuyModalProps> = ({
             {listing.cardBase?.name} - {listing.edition?.name}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            Precio: {formatPrice(listing.price)} por unidad
+            Precio: {formatPrice(listing.price)}
           </Typography>
         </Box>
-
-        <TextField
-          fullWidth
-          label="Cantidad"
-          type="number"
-          value={quantity}
-          onChange={(e) => setQuantity(parseInt(e.target.value) || 1)}
-          inputProps={{ min: 1, max: listing.quantity }}
-          sx={{ mb: 2 }}
-        />
 
         <FormControl fullWidth sx={{ mb: 2 }}>
           <InputLabel>Método de Pago</InputLabel>
@@ -115,7 +103,7 @@ const BuyModal: React.FC<BuyModalProps> = ({
 
         <TextField
           fullWidth
-          label="Información de Contacto"
+          label="Información de Contacto (Opcional)"
           multiline
           rows={3}
           placeholder="Proporciona tu información de contacto (teléfono, email, etc.) para coordinar la compra..."
@@ -132,7 +120,7 @@ const BuyModal: React.FC<BuyModalProps> = ({
 
         <Paper sx={{ p: 2, backgroundColor: 'primary.light', color: 'primary.contrastText' }}>
           <Typography variant="h6">
-            Total: {formatPrice(parseFloat(listing.price.toString()) * quantity)}
+            Total: {formatPrice(listing.price)}
           </Typography>
         </Paper>
       </DialogContent>
@@ -143,7 +131,7 @@ const BuyModal: React.FC<BuyModalProps> = ({
         <Button
           variant="contained"
           onClick={handleConfirm}
-          disabled={quantity < 1 || quantity > listing.quantity || !paymentMethod || !contactInfo || isLoading}
+          disabled={!paymentMethod || isLoading}
           startIcon={isLoading ? <CircularProgress size={20} /> : null}
         >
           {isLoading ? 'Procesando...' : 'Confirmar Compra'}
